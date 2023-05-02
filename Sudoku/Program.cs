@@ -105,9 +105,9 @@ namespace SudokuTest
             bool DataValidation(int[][] puzzle)
             {
                 int level = (int)Math.Sqrt(puzzle.Length);
-                const int L1_COUNT = 3; // Sudoku has 3 units to validate; rows, columns, big quares. So that makes our "first dimension" of our multidimensional array
+                const int L1_COUNT = 3; // Sudoku has 3 units to validate; rows, columns, big quares. So that makes our "first dimension" of our multidimensional array.
                 int L2_COUNT = puzzle.Length; // We can find √N items of each unit, so we have √N arrays of rows, √N arrays of columns and √N arrays of big squares.
-                int L3_COUNT = puzzle.Length; // Each row, column or big square, has √N little squares which hold the numeric value
+                int L3_COUNT = puzzle.Length; // Each row, column or big square, has √N little squares which hold the numeric value.
 
                 bool[,,] validationUnits = new bool[L1_COUNT, L2_COUNT, L3_COUNT];
                 int sudokuRowIndex = 0, sudokuColumnIndex = 1, sudokuBigSquareIndex = 2;
