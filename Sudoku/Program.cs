@@ -94,9 +94,7 @@ namespace SudokuTest
         static bool ValidateSudoku(int[][] puzzle)
         {
             // Structure validation
-            if (puzzle.Length <= 0 ||
-                !double.IsInteger(Math.Sqrt(puzzle.Length)) ||
-                puzzle.Any(x => x.Length != puzzle.Length))
+            if (puzzle.Length <= 0 || !double.IsInteger(Math.Sqrt(puzzle.Length)) || puzzle.Any(x => x.Length != puzzle.Length))
             {
                 Console.WriteLine("Invalid structure!");
                 return false;
