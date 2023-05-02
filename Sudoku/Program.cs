@@ -85,8 +85,6 @@ namespace SudokuTest
                 new int[] {1}
             };
 
-            int[][] badSudoku3 = { };
-
             Debug.Assert(ValidateSudoku(goodSudoku1), "This is supposed to validate! It's a good sudoku!");
             Debug.Assert(ValidateSudoku(goodSudoku2), "This is supposed to validate! It's a good sudoku!");
             Debug.Assert(!ValidateSudoku(badSudoku1), "This isn't supposed to validate! It's a bad sudoku!");
