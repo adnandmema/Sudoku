@@ -105,18 +105,18 @@ namespace SudokuTest
             bool DataValidation(int[][] puzzle)
             {
                 int level = (int)Math.Sqrt(puzzle.Length);
-                const int L1_COUNT = 3; // Sudoku has 3 units to validate; rows, columns, big boxes. So that makes our "first dimension" of our multidimensional array
-                int L2_COUNT = puzzle.Length; // We can find √N items of each unit, so we have √N arrays of rows, √N arrays of columns and √N arrays of big boxes.
-                int L3_COUNT = puzzle.Length; // Each row, column or big box, has √N small boxes which hold the numeric value
+                const int L1_COUNT = 3; // Sudoku has 3 units to validate; rows, columns, big quares. So that makes our "first dimension" of our multidimensional array
+                int L2_COUNT = puzzle.Length; // We can find √N items of each unit, so we have √N arrays of rows, √N arrays of columns and √N arrays of big squares.
+                int L3_COUNT = puzzle.Length; // Each row, column or big square, has √N little squares which hold the numeric value
 
                 bool[,,] validationUnits = new bool[L1_COUNT, L2_COUNT, L3_COUNT];
-                int sudokuRowIndex = 0, sudokuColumnIndex = 1, sudokuBigBoxIndex = 2;
+                int sudokuRowIndex = 0, sudokuColumnIndex = 1, sudokuBigSquareIndex = 2;
 
                 for (int currentRowIndex = 0; currentRowIndex < puzzle.Length; currentRowIndex++)
                 {
                     for (int currentColumnIndex = 0; currentColumnIndex < puzzle.Length; currentColumnIndex++)
                     {
-                        int currentBoxIndex = (currentColumnIndex / level) + ((currentRowIndex / level) * level);
+                        int currentSquareIndex = (currentColumnIndex / level) + ((currentRowIndex / level) * level);
                         int value = puzzle[currentRowIndex][currentColumnIndex] - 1;
 
                         if (value < 0 || value >= puzzle.Length) // invalid value
@@ -125,7 +125,7 @@ namespace SudokuTest
                             return false;
                         }
 
-                        if (validationUnits[sudokuRowIndex, currentRowIndex, value] || validationUnits[sudokuColumnIndex, currentColumnIndex, value] || validationUnits[sudokuBigBoxIndex, currentBoxIndex, value])  // The value has been found before on a row, column or big box
+                        if (validationUnits[sudokuRowIndex, currentRowIndex, value] || validationUnits[sudokuColumnIndex, currentColumnIndex, value] || validationUnits[sudokuBigSquareIndex, currentSquareIndex, value])  // The value has been found before on a row, column or big square
                         {
                             Console.WriteLine("Invalid data!");
                             return false;
@@ -134,7 +134,7 @@ namespace SudokuTest
                         // The value hasn't been found before, so we check it on each validation unit
                         validationUnits[sudokuRowIndex, currentRowIndex, value] = true;
                         validationUnits[sudokuColumnIndex, currentColumnIndex, value] = true;
-                        validationUnits[sudokuBigBoxIndex, currentBoxIndex, value] = true;
+                        validationUnits[sudokuBigSquareIndex, currentSquareIndex, value] = true;
                     }
                 }
 
