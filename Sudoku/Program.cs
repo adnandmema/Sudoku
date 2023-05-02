@@ -28,6 +28,7 @@
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -84,6 +85,8 @@ namespace SudokuTest
                 new int[] {1}
             };
 
+            int[][] badSudoku3 = { };
+
             Debug.Assert(ValidateSudoku(goodSudoku1), "This is supposed to validate! It's a good sudoku!");
             Debug.Assert(ValidateSudoku(goodSudoku2), "This is supposed to validate! It's a good sudoku!");
             Debug.Assert(!ValidateSudoku(badSudoku1), "This isn't supposed to validate! It's a bad sudoku!");
@@ -92,7 +95,56 @@ namespace SudokuTest
 
         static bool ValidateSudoku(int[][] puzzle)
         {
-            throw new NotImplementedException();
+            // Structure validation
+            if (puzzle.Length <= 0 ||
+                !double.IsInteger(Math.Sqrt(puzzle.Length)) ||
+                puzzle.Any(x => x.Length != puzzle.Length))
+            {
+                Console.WriteLine("Invalid structure!");
+                return false;
+            }
+
+            return DataValidation(puzzle);
+
+            bool DataValidation(int[][] puzzle)
+            {
+                int level = (int)Math.Sqrt(puzzle.Length);
+                const int L1_COUNT = 3; // Sudoku has 3 units to validate; rows, columns, big boxes. So that makes our "first dimension" of our multidimensional array
+                int L2_COUNT = puzzle.Length; // We can find √N items of each unit, so we have √N arrays of rows, √N arrays of columns and √N arrays of big boxes.
+                int L3_COUNT = puzzle.Length; // Each row, column or big box, has √N small boxes which hold the numeric value
+
+                bool[,,] validationUnits = new bool[L1_COUNT, L2_COUNT, L3_COUNT];
+                int sudokuRowIndex = 0, sudokuColumnIndex = 1, sudokuBigBoxIndex = 2;
+
+                for (int currentRowIndex = 0; currentRowIndex < puzzle.Length; currentRowIndex++)
+                {
+                    for (int currentColumnIndex = 0; currentColumnIndex < puzzle.Length; currentColumnIndex++)
+                    {
+                        int currentBoxIndex = (currentColumnIndex / level) + ((currentRowIndex / level) * level);
+                        int value = puzzle[currentRowIndex][currentColumnIndex] - 1;
+
+                        if (value < 0 || value >= puzzle.Length) // invalid value
+                        {
+                            Console.WriteLine($"Value should be between 1 and {puzzle.Length}!");
+                            return false;
+                        }
+
+                        if (validationUnits[sudokuRowIndex, currentRowIndex, value] || validationUnits[sudokuColumnIndex, currentColumnIndex, value] || validationUnits[sudokuBigBoxIndex, currentBoxIndex, value])  // The value has been found before on a row, column or big box
+                        {
+                            Console.WriteLine("Invalid data!");
+                            return false;
+                        }
+
+                        // The value hasn't been found before, so we check it on each validation unit
+                        validationUnits[sudokuRowIndex, currentRowIndex, value] = true;
+                        validationUnits[sudokuColumnIndex, currentColumnIndex, value] = true;
+                        validationUnits[sudokuBigBoxIndex, currentBoxIndex, value] = true;
+                    }
+                }
+
+                Console.WriteLine("Valid sudoku!");
+                return true;
+            }
         }
     }
 }
